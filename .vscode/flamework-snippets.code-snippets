@@ -54,4 +54,10 @@
 			"}",
 		]
 	},
+
+	"Flamework Dependency Macro": {
+		"prefix": ["dependency", "import"],
+		"description": "Imports an instance of a singleton.",
+		"body": "const ${2} = Dependency<${1}>();"
+	}
 }
