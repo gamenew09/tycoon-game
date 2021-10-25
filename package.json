@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rbxtsc",
-    "watch": "rbxtsc -w"
+    "build:rojo": "rojo build --output build.rbxlx",
+    "build:ts": "npx rbxtsc --verbose",
+    "build": "npm run build:ts && npm run build:rojo",
+    "watch:rojo": "rojo serve",
+    "watch:ts": "npx rbxtsc -w --verbose",
+    "watch": "concurrently \"npm:watch:rojo\" \"npm:watch:ts\"",
+    "start": "npm run build && npm run watch"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +20,7 @@
     "@rbxts/types": "^1.0.530",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
+    "concurrently": "^6.3.0",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",

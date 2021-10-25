@@ -1,5 +1,24 @@
+# Artifacts of roblox-ts
 /node_modules
 /out
 /include
 *.tsbuildinfo
-flamework.build
+
+# Ignore build artifacts
+*.rbxl
+*.rbxlx
+
+*.rbxlx.lock
+*.rbxl.lock
+
+*.rbxm
+*.rbxmx
+
+# Allow place files in the assets folder
+!assets/**/*.rbxl
+!assets/**/*.rbxlx
+!assets/**/*.rbxm
+!assets/**/*.rbxmx
+
+# Environment Variable Files
+.env
