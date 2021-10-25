@@ -1,7 +1,0 @@
-{
-	"version": 1,
-	"flameworkVersion": "1.0.0-beta.6",
-	"identifiers": {
-		"flamework-template:out/shared/events@GlobalEvents": "shared/events@GlobalEvents"
-	}
-}
