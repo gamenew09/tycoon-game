@@ -4,6 +4,9 @@
 /include
 *.tsbuildinfo
 
+# Artifact of flamework transformer
+flamework.build
+
 # Ignore build artifacts
 *.rbxl
 *.rbxlx
