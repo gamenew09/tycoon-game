@@ -1,8 +1,8 @@
 import { Components } from "@flamework/components";
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players, ServerStorage, Workspace } from "@rbxts/services";
+import { CollectionService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import { TycoonLocation } from "server/components/TycoonLocation";
-import { Tycoon } from "shared/components/Tycoon";
+import { TycoonServer } from "server/components/TycoonServer";
 import tutil from "shared/tutil";
 
 const components = Dependency<Components>();
@@ -35,26 +35,28 @@ export class TycoonProvider implements OnStart, OnInit {
         this.destroyTycoonFor(player);
     }
 
-    private plyToTycoon: Map<Player, Tycoon> = new Map();
+    private plyToTycoon: Map<Player, TycoonServer> = new Map();
     private plyToTycoonLocation: Map<Player, TycoonLocation> = new Map();
 
     protected choosePlot(): TycoonLocation {
         const locations = components.getAllComponents<TycoonLocation>();
         const availableLocations = locations.filter((location) => location.takenBy === undefined);
-        return availableLocations[math.random(1, availableLocations.size())];
+        return availableLocations[math.random(0, availableLocations.size() - 1)];
     }
 
-    createTycoonFor(player: Player): Tycoon {
+    createTycoonFor(player: Player): TycoonServer {
         const location = this.choosePlot();
         assert(location, "Couldn't pick random location that was available.");
 
         assert(this.tycoonTemplate, "TycoonProvider.tycoonTemplate is undefined.");
         const tycoonInstance = this.tycoonTemplate!.Clone();
+        tycoonInstance.SetAttribute("OwningUserId", player.UserId);
         tycoonInstance.SetPrimaryPartCFrame(location.getCFrame());
         tycoonInstance.Parent = Workspace;
 
-        const tycoon = components.addComponent<Tycoon>(tycoonInstance);
-        tycoon.owner = player;
+        CollectionService.AddTag(tycoonInstance, "Tycoon");
+
+        const tycoon = components.addComponent<TycoonServer>(tycoonInstance);
         this.plyToTycoon.set(player, tycoon);
 
         location.takenBy = player; // Make sure location knows that its been taken up by a player.
