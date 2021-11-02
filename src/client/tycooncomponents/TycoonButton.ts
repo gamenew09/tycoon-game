@@ -1,6 +1,5 @@
 import { OnStart } from "@flamework/core";
 import { Component } from "@flamework/components";
-import { t } from "@rbxts/t";
 import tutil from "shared/tutil";
 import { Players } from "@rbxts/services";
 import { TycoonComponentClient } from "client/components/TycoonComponentClient";
