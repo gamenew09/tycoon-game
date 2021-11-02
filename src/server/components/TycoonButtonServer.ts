@@ -6,7 +6,7 @@ interface Attributes {
     UnlockId: string;
     Cost?: number;
 
-    ObjectText: string;
+    ObjectText?: string;
 }
 
 @Component({
@@ -22,7 +22,8 @@ export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> 
         if (interact === undefined) {
             interact = new Instance("ProximityPrompt");
             interact.ActionText = "Buy";
-            interact.ObjectText = this.attributes.ObjectText + ` [$${this.attributes.Cost ?? 0}]`;
+            interact.ObjectText =
+                this.attributes.ObjectText ?? this.attributes.UnlockId + ` [$${this.attributes.Cost ?? 0}]`;
             interact.HoldDuration = 0.5;
             interact.Parent = this.instance;
         }
@@ -33,11 +34,19 @@ export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> 
 
         this.maid.GiveTask(
             interact.Triggered.Connect((ply) => {
-                if (ply === this.getOwningTycoon().getOwner()) {
+                const tycoon = this.getOwningTycoon();
+                if (ply === tycoon.getOwner()) {
                     if (interact !== undefined) {
                         interact.Enabled = false;
                     }
-                    print("trigger by owning player.");
+
+                    // Send unlock message to tycoon.
+
+                    this.tycoonCommunication.fire("unlock", tycoon, this.attributes.UnlockId);
+
+                    // Destroy the component itself & the attached instance.
+                    this.destroy();
+                    this.instance.Destroy();
                 }
             }),
         );

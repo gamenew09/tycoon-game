@@ -14,6 +14,21 @@ export class TycoonComponentClient<A extends object, I extends Instance>
     extends BaseComponent<A & TycoonComponentAttributes, I>
     implements OnStart, ITycoonComponent<TycoonClient>
 {
+    unlockComponent(): void {
+        throw "Method not implemented.";
+    }
+    lockComponent(): void {
+        throw "Method not implemented.";
+    }
+
+    /**
+     * Checks to see if this component is currently locked.
+     * @returns Is this component locked?
+     */
+    public isLocked(): boolean {
+        return this.attributes.Locked === true;
+    }
+
     private owner?: TycoonClient;
 
     public getOwningTycoon(): TycoonClient {

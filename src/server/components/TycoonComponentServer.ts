@@ -3,6 +3,7 @@ import { Component, BaseComponent, Components } from "@flamework/components";
 import { TycoonServer } from "./TycoonServer";
 import { RunService, ServerStorage } from "@rbxts/services";
 import { ITycoonComponent, TycoonComponentAttributes } from "shared/components/TycoonComponent";
+import { TycoonCommunication } from "server/services/TycoonCommunication";
 
 const components = Dependency<Components>();
 
@@ -16,6 +17,10 @@ export class TycoonComponentServer<A extends object, I extends Instance>
     extends BaseComponent<A & TycoonComponentAttributes, I>
     implements OnStart, ITycoonComponent<TycoonServer>
 {
+    constructor(protected tycoonCommunication: TycoonCommunication) {
+        super();
+    }
+
     private owner?: TycoonServer;
 
     public getOwningTycoon(): TycoonServer {
@@ -46,6 +51,66 @@ export class TycoonComponentServer<A extends object, I extends Instance>
         });
     }
 
+    /**
+     * A shorthand to set the Locked attribute to a given boolean state.
+     * @param lockedState The new state that the Locked attribute should be set to.
+     */
+    protected setLocked(lockedState: boolean) {
+        (this as BaseComponent<TycoonComponentAttributes>).setAttribute("Locked", true);
+    }
+
+    /**
+     * Checks to see if this component is currently locked.
+     * @returns Is this component locked?
+     */
+    public isLocked(): boolean {
+        return this.attributes.Locked === true;
+    }
+
+    /**
+     * When we unlock a component we want to parent to this value.
+     */
+    private oldParent: Instance | undefined = undefined;
+    public unlockComponent(): void {
+        this.setLocked(false);
+
+        this.instance.Parent = this.oldParent;
+    }
+
+    public lockComponent(): void {
+        this.setLocked(true);
+
+        this.instance.Parent = ServerStorage;
+    }
+
+    protected startCommunication(): void {
+        this.oldParent = this.instance.Parent;
+
+        this.maid.GiveTask(
+            this.tycoonCommunication.connect("unlock", this.getOwningTycoon(), (unlockId: string) => {
+                if (unlockId === this.attributes.Id) {
+                    // We are wanting to be unlocked, call unlock
+                    // (should we just set a variable and instead wait for lifecycle event?)
+                    this.unlockComponent();
+                }
+            }),
+        );
+        this.maid.GiveTask(
+            this.tycoonCommunication.connect("lock", this.getOwningTycoon(), (unlockId: string) => {
+                if (unlockId === this.attributes.Id) {
+                    // We are wanting to be unlocked, call unlock
+                    // (should we just set a variable and instead wait for lifecycle event?)
+                    this.lockComponent();
+                }
+            }),
+        );
+
+        // If the attribute is already set as locked, then go ahead and tell the component to lock.
+        if (this.attributes.Locked) {
+            this.lockComponent();
+        }
+    }
+
     onStart() {
         // Go up the parent tree and try and find a Tycoon component.
         const TIMEOUT_REASON = "timeout reached";
@@ -58,6 +123,7 @@ export class TycoonComponentServer<A extends object, I extends Instance>
                 this.owner = tycoon;
 
                 this.onTycoonStart();
+                this.startCommunication();
             })
             .catch((reason: unknown) => {
                 if (
