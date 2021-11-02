@@ -1,0 +1,42 @@
+{
+    "Client Tycoon Component": {
+        "prefix": ["clienttycooncomponent", "tycooncomponentclient"],
+        "description": "Create a TycoonComponentClient",
+        "body": [
+            "import { OnStart } from \"@flamework/core\";",
+            "import { Component } from \"@flamework/components\";",
+            "import { TycoonComponentClient } from \"client/components/TycoonComponentClient\";",
+            "",
+            "interface Attributes {}",
+            "",
+            "@Component({",
+                "\ttag: \"${1:$TM_FILENAME_BASE}\",",
+            "})",
+            "export class ${1:$TM_FILENAME_BASE}Client extends TycoonComponentClient<Attributes, Instance> implements OnStart {",
+                "\tonTycoonStart() {",
+                    "\t\t$0",
+                "\t}",
+            "}"
+        ]
+    },
+    "Server Tycoon Component": {
+        "prefix": ["servertycooncomponent", "tycooncomponentserver"],
+        "description": "Create a TycoonComponentServer",
+        "body": [
+            "import { OnStart } from \"@flamework/core\";",
+            "import { Component } from \"@flamework/components\";",
+            "import { TycoonComponentServer } from \"server/components/TycoonComponentServer\";",
+            "",
+            "interface Attributes {}",
+            "",
+            "@Component({",
+                "\ttag: \"${1:$TM_FILENAME_BASE}\",",
+            "})",
+            "export class ${1:$TM_FILENAME_BASE}Server extends TycoonComponentServer<Attributes, Part> implements OnStart {",
+                "\tonTycoonStart() {",
+                    "\t\t$0",
+                "\t}",
+            "}"
+        ]
+    }
+}
