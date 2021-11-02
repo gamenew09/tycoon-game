@@ -144,8 +144,8 @@
 		<Item class="Part" referent="RBX20F73799686249E8AB35077F6FB1E100">
 			<Properties>
 				<bool name="Anchored">false</bool>
-				<BinaryString name="AttributesSerialize"><![CDATA[AwAAAAQAAABDb3N0BQAAAAACAAAASWQCBwAAAEJ1dHRvbkEIAAAAVW5sb2NrSWQCBwAAAEJ1
-dHRvbkI=]]></BinaryString>
+				<BinaryString name="AttributesSerialize"><![CDATA[BAAAAAQAAABDb3N0BQAAAAACAAAASWQCBwAAAEJ1dHRvbkEGAAAATG9ja2VkAwAIAAAAVW5s
+b2NrSWQCBwAAAEJ1dHRvbkI=]]></BinaryString>
 				<float name="BackParamA">-0.5</float>
 				<float name="BackParamB">0.5</float>
 				<token name="BackSurface">0</token>
@@ -238,8 +238,8 @@ dHRvbkI=]]></BinaryString>
 		<Item class="Part" referent="RBX209603865BFD4B52BCB55AA7858297E3">
 			<Properties>
 				<bool name="Anchored">false</bool>
-				<BinaryString name="AttributesSerialize"><![CDATA[AwAAAAQAAABDb3N0BQAAAAACAAAASWQCBwAAAEJ1dHRvbkIIAAAAVW5sb2NrSWQCBwAAAEJ1
-dHRvbkI=]]></BinaryString>
+				<BinaryString name="AttributesSerialize"><![CDATA[BAAAAAQAAABDb3N0BQAAAAACAAAASWQCBwAAAEJ1dHRvbkIGAAAATG9ja2VkAwEIAAAAVW5s
+b2NrSWQCBwAAAEJ1dHRvbkI=]]></BinaryString>
 				<float name="BackParamA">-0.5</float>
 				<float name="BackParamB">0.5</float>
 				<token name="BackSurface">0</token>
