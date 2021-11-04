@@ -8,6 +8,8 @@ export interface DropTypeRegister {
     PartProperties: Partial<Pick<Part, "Color" | "BrickColor" | "Material" | "Size" | "Transparency">>;
     /**
      * The amount of money that would be added to the bank when collected.
+     *
+     * If set to a NumberRange, each time the resource is collected a random value between `NumberRange.Min` and `NumberRange.Max` (including min/max) is used.
      */
     Worth: number | NumberRange;
 }
