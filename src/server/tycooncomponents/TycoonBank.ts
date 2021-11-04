@@ -5,6 +5,7 @@ import { TycoonBankInstance } from "shared/tycooncomponents/TycoonBank";
 import { Players } from "@rbxts/services";
 import { MoneyProvider } from "server/services/MoneyProvider";
 import { TycoonCommunication } from "server/services/TycoonCommunication";
+import { SoundPlayer } from "server/services/SoundPlayer";
 
 interface Attributes {}
 
@@ -13,35 +14,46 @@ interface Attributes {}
 })
 export class TycoonBankServer extends TycoonComponentServer<Attributes, TycoonBankInstance> implements OnStart {
     private moneyProvider!: MoneyProvider;
-    private nextGiveMoney = 0;
+    private soundPlayer!: SoundPlayer;
+    private prompt!: ProximityPrompt;
 
     onTycoonStart() {
         this.moneyProvider = Dependency<MoneyProvider>();
+        this.soundPlayer = Dependency<SoundPlayer>();
 
         this.getOwningTycoon().onAttributeChanged("BankAmount", (newValue, oldValue) => {
             this.setMoneyLabelText(newValue);
         });
 
+        const interact = new Instance("ProximityPrompt");
+        interact.ActionText = "Collect";
+        //interact.HoldDuration = 0.5;
+        interact.Parent = this.instance.BankGrabPad;
+        interact.Name = "TycoonBankPrompt";
+
+        this.maid.GiveTask(interact.Triggered.Connect((ply) => this.handleBankGrabInteract(ply)));
+
+        this.maid.GiveTask(() => {
+            this.prompt.Destroy();
+            (this.prompt as ProximityPrompt | undefined) = undefined;
+        });
+        this.prompt = interact;
+
         this.setMoneyLabelText(this.getOwningTycoon().attributes.BankAmount);
+    }
 
-        this.maid.GiveTask(
-            this.instance.BankGrabPad.Touched.Connect((part) => {
-                // Make sure that we aren't trying to give money the next frame after we already gave money.
-                if (this.nextGiveMoney <= tick()) {
-                    const ply = Players.GetPlayerFromCharacter(part.Parent);
-                    if (ply !== undefined && ply === this.getOwningTycoon().getOwner()) {
-                        const tycoon = this.getOwningTycoon();
-                        this.moneyProvider.giveMoney(ply, tycoon.attributes.BankAmount);
-                        tycoon.setAttribute("BankAmount", 0);
-
-                        this.nextGiveMoney = tick() + 0.2;
-                    }
-                }
-            }),
-        );
+    protected handleBankGrabInteract(ply: Player) {
+        const tycoon = this.getOwningTycoon();
+        if (ply !== undefined && ply === tycoon.getOwner() && tycoon.attributes.BankAmount > 0) {
+            this.moneyProvider.giveMoney(ply, tycoon.attributes.BankAmount);
+            tycoon.setAttribute("BankAmount", 0);
+            this.soundPlayer.playUiSound(ply, "cash_from_bank", 0.5);
+        }
     }
 
     protected setMoneyLabelText(moneyAmount: number): void {
-        this.instance.MoneyDisplay.MoneySurfaceGui.MoneyLabel.Text = `$${moneyAmount}`;
+        const moneyText = `$${moneyAmount}`;
+        this.instance.MoneyDisplay.MoneySurfaceGui.MoneyLabel.Text = moneyText;
+        this.prompt.ObjectText = moneyText;
     }
 }
