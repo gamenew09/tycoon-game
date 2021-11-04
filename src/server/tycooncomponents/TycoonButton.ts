@@ -1,6 +1,7 @@
-import { OnStart } from "@flamework/core";
+import { Dependency, OnStart } from "@flamework/core";
 import { Component } from "@flamework/components";
 import { TycoonComponentServer } from "server/components/TycoonComponentServer";
+import { MoneyProvider } from "server/services/MoneyProvider";
 
 interface Attributes {
     UnlockId: string;
@@ -14,6 +15,8 @@ interface Attributes {
 })
 export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> implements OnStart {
     onTycoonStart() {
+        const moneyProvider = Dependency<MoneyProvider>();
+
         this.log.Verbose(`Hey we're inside a tycoon! {owner}`, this.getOwningTycoon().getOwner());
 
         // Either use an existing ProximityPrompt in the button or create a new one.
@@ -33,9 +36,13 @@ export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> 
         this.maid.GiveTask(interact);
 
         this.maid.GiveTask(
-            interact.Triggered.Connect((ply) => {
+            interact.Triggered.Connect(async (ply) => {
+                const cost = math.max(this.attributes.Cost ?? 0, 0);
                 const tycoon = this.getOwningTycoon();
-                if (ply === tycoon.getOwner()) {
+                if (ply === tycoon.getOwner() && (await moneyProvider.getMoney(ply)) >= cost) {
+                    await moneyProvider.giveMoney(ply, -cost); // Take away money.
+
+                    // If we did take away money, unlock the components.
                     if (interact !== undefined) {
                         interact.Enabled = false;
                     }
