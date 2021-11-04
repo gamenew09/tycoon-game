@@ -61,7 +61,7 @@ export class TycoonCommunication implements OnStart, OnInit {
     }
 
     /**
-     *
+     * Connects to a specific message for a specific tycoon.
      * @param message The message type to connect to.
      * @param tycoon The tycoon to listen to.
      * @param callback The callback that gets called when we recieve the message from the tycoon we are listening to.
