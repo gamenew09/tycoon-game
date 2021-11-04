@@ -1,8 +1,9 @@
 import { Service, OnStart, OnInit } from "@flamework/core";
-import { HttpService, Players } from "@rbxts/services";
+import { HttpService, Players, Workspace } from "@rbxts/services";
 import { ServerLog } from "./ServerLog";
 import { Logger } from "@rbxts/log";
 import { assertLog } from "shared/logutil";
+import { SetPartCollisionGroup } from "shared/collisiongroups";
 
 interface CallbackEntry {
     Id: string;
@@ -92,7 +93,35 @@ export class PlayerManager implements OnStart, OnInit {
         });
     }
 
+    private async onPlayerCharacterSpawn(ply: Player, char: Model) {
+        while (!char.IsDescendantOf(Workspace)) {
+            await Promise.delay(0.1);
+        }
+
+        // All parts in a character's body should be set as the collision group of Player.
+        char.GetDescendants()
+            .mapFiltered((val) => {
+                if (val.IsA("BasePart")) {
+                    return val;
+                } else {
+                    return undefined;
+                }
+            })
+            .forEach((part) => {
+                SetPartCollisionGroup(part, "Player");
+            });
+    }
+
     private onPlayerAdded(ply: Player) {
+        (async () => {
+            // Handle character spawning
+            ply.CharacterAdded.Connect((char) => this.onPlayerCharacterSpawn(ply, char));
+
+            if (ply.Character !== undefined) {
+                this.onPlayerCharacterSpawn(ply, ply.Character);
+            }
+        })();
+
         this.runCallbacks(ply, "PlayerAdded");
     }
 

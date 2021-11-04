@@ -9,6 +9,8 @@ import {
 } from "shared/tycooncomponents/TycoonDropper";
 import Object from "@rbxts/object-utils";
 import { foreachInObject } from "shared/objectutil";
+import { PhysicsService } from "@rbxts/services";
+import { SetPartCollisionGroup } from "shared/collisiongroups";
 
 interface Attributes extends TycoonDropperAttributes {}
 
@@ -42,6 +44,7 @@ export class TycoonDropperServer
 
         part.CFrame = this.instance.DropPart.DropLocation.WorldCFrame;
 
+        SetPartCollisionGroup(part, "Resource");
         part.Parent = this.getOwningTycoon().instance;
         part.SetNetworkOwner(undefined); // Change ownership to server.
     }
