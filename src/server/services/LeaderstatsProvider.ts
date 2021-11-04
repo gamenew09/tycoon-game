@@ -55,14 +55,14 @@ export class LeaderstatsProvider implements OnStart, OnInit {
         ply: Player,
         statName: string,
         valueType: N,
-    ): LeaderstatValueInstanceTypes | undefined {
+    ): Instances[N] | undefined {
         const valueMap = this.plyToValueMap.get(ply);
 
         const entry = this.leaderstats.find((entry) => entry.Name === statName);
 
         // Make sure the stat entry & value map exists.
         if (entry !== undefined && valueMap !== undefined) {
-            return valueMap.get(entry.Name);
+            return valueMap.get(entry.Name) as Instances[N];
         }
 
         return undefined;
