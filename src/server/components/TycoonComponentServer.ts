@@ -56,7 +56,7 @@ export class TycoonComponentServer<A extends object, I extends Instance>
      * @param lockedState The new state that the Locked attribute should be set to.
      */
     protected setLocked(lockedState: boolean) {
-        (this as BaseComponent<TycoonComponentAttributes>).setAttribute("Locked", true);
+        (this as BaseComponent<TycoonComponentAttributes>).setAttribute("Locked", lockedState);
     }
 
     /**
@@ -135,7 +135,7 @@ export class TycoonComponentServer<A extends object, I extends Instance>
                     // Warns if the reason is TIMEOUT_REASON and the component is not a descendant of ServerStorage (meaning the instance isn't under the instance tree of ServerStorage)
                     warn(`Failed to find tycoon: ${reason}`);
                 }
-                components.removeComponent(this.instance, TycoonComponentServer);
+                this.destroy();
             });
     }
 
