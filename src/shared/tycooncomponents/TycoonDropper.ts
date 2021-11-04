@@ -1,5 +1,5 @@
-/*
- */
+import Object from "@rbxts/object-utils";
+import { t } from "@rbxts/t";
 
 export interface DropTypeRegister {
     /**
@@ -11,6 +11,16 @@ export interface DropTypeRegister {
      */
     Worth: number;
 }
+export const isDropTypeRegister = t.strictInterface({
+    PartProperties: t.interface({
+        Color: t.union(t.Color3, t.nil),
+        BrickColor: t.union(t.BrickColor, t.nil),
+        Material: t.union(t.enum(Enum.Material), t.nil),
+        Size: t.union(t.Vector3, t.nil),
+        Transparency: t.union(t.number, t.nil),
+    }),
+    Worth: t.number,
+});
 
 /**
  * Map of the types of drops that TycoonDropper can drop.
@@ -25,6 +35,8 @@ export const DropTypes = {
     }),
 };
 export type DropTypes = typeof DropTypes;
+
+export const isDropTypeKeys: t.check<keyof DropTypes> = t.literal(...Object.keys(DropTypes));
 
 export interface TycoonDropperInstance extends Model {
     DropPart: Part & {

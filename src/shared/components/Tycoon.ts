@@ -4,6 +4,7 @@ import { HttpService, Players } from "@rbxts/services";
 
 export interface TycoonAttributes {
     OwningUserId?: number;
+    BankAmount: number;
 }
 
 export interface ITycoon {

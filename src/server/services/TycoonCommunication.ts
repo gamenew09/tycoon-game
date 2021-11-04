@@ -3,6 +3,7 @@ import type { FunctionParameters } from "@flamework/networking/out/types";
 import Signal from "@rbxts/signal";
 import { t } from "@rbxts/t";
 import { Tycoon, TycoonAttributes } from "shared/components/Tycoon";
+import { DropTypeRegister, isDropTypeKeys, DropTypes, isDropTypeRegister } from "shared/tycooncomponents/TycoonDropper";
 
 /**
  * A list of messages and their callback types.
@@ -10,6 +11,7 @@ import { Tycoon, TycoonAttributes } from "shared/components/Tycoon";
 export interface CommunicationMessages {
     unlock: (id: string) => void;
     lock: (id: string) => void;
+    collectResource: (resourceType: keyof DropTypes, resource: DropTypeRegister) => void;
 }
 
 type FunctionCheckParameters<T> = T extends (...args: infer P) => unknown ? t.check<P> : never;
@@ -22,6 +24,7 @@ const messageTypeChecks: {
 } = {
     lock: t.strictArray(t.string),
     unlock: t.strictArray(t.string),
+    collectResource: t.strictArray(isDropTypeKeys, isDropTypeRegister),
 };
 
 /**

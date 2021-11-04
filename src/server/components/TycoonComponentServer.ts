@@ -4,7 +4,6 @@ import { TycoonServer } from "./TycoonServer";
 import { RunService, ServerStorage } from "@rbxts/services";
 import { ITycoonComponent, TycoonComponentAttributes } from "shared/components/TycoonComponent";
 import { TycoonCommunication } from "server/services/TycoonCommunication";
-
 const components = Dependency<Components>();
 
 interface Attributes {}

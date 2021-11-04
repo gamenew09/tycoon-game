@@ -52,6 +52,7 @@ export class TycoonProvider implements OnStart, OnInit {
         const tycoonInstance = this.tycoonTemplate!.Clone();
         tycoonInstance.Name = `${player.Name}_Tycoon`;
         tycoonInstance.SetAttribute("OwningUserId", player.UserId);
+        tycoonInstance.SetAttribute("BankAmount", 0);
         tycoonInstance.SetPrimaryPartCFrame(location.getCFrame());
         tycoonInstance.Parent = Workspace;
 
