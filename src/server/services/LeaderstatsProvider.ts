@@ -1,6 +1,9 @@
 import { Service, OnStart, OnInit, Reflect } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { Players } from "@rbxts/services";
+import { assertLog } from "shared/logutil";
 import { PlayerManager } from "./PlayerManager";
+import { ServerLog } from "./ServerLog";
 
 type LeaderstatValueType = "IntValue" | "StringValue";
 
@@ -24,10 +27,22 @@ interface LeaderstatEntry<T extends keyof LeaderstatValueTypes = keyof Leadersta
     loadOrder: 1,
 })
 export class LeaderstatsProvider implements OnStart, OnInit {
-    constructor(private playerManager: PlayerManager) {}
+    constructor(private playerManager: PlayerManager, private serverLog: ServerLog) {}
+
+    private _log?: Logger;
+    protected getLog(): Logger {
+        const log = this._log;
+        assert(log, "Log not created yet.");
+        return log;
+    }
 
     onInit() {
+        this._log = this.serverLog.forController(LeaderstatsProvider);
         this.registerStat("Money", "IntValue", 0);
+    }
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.getLog(), condition, template, ...args);
     }
 
     onStart() {
@@ -42,7 +57,11 @@ export class LeaderstatsProvider implements OnStart, OnInit {
         valueType: N,
         defaultValue: LeaderstatValueTypes[N],
     ) {
-        assert(this.leaderstats.filter((entry) => entry.Name === statName).size() <= 0, `${statName} already exists.`);
+        this.assert(
+            this.leaderstats.filter((entry) => entry.Name === statName).size() <= 0,
+            `{statName} already exists.`,
+            statName,
+        );
 
         this.leaderstats.push({
             Name: statName,

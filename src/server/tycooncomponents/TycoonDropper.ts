@@ -23,7 +23,7 @@ export class TycoonDropperServer
 
     protected dropResource(): void {
         const dropInfo = DropTypes[this.attributes.Type];
-        assert(dropInfo, `${this.attributes.Type} is not a valid Dropper resource drop type.`);
+        this.assert(dropInfo, `{attribute_type} is not a valid Dropper resource drop type.`, this.attributes.Type);
 
         const part = new Instance("Part");
         part.Name = `Resource_${this.attributes.Type}`;
@@ -57,7 +57,7 @@ export class TycoonDropperServer
         }
     }
     onTycoonStart() {
-        print("dropperserver");
+        this.log.Info("dropperserver");
 
         // If the tycoon starts and we are already unlocked, just set next drop time.
         if (!this.isLocked()) {

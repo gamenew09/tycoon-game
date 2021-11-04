@@ -4,6 +4,9 @@ import Signal from "@rbxts/signal";
 import { t } from "@rbxts/t";
 import { Tycoon, TycoonAttributes } from "shared/components/Tycoon";
 import { DropTypeRegister, isDropTypeKeys, DropTypes, isDropTypeRegister } from "shared/tycooncomponents/TycoonDropper";
+import { ServerLog } from "./ServerLog";
+import { Logger } from "@rbxts/log";
+import { assertLog } from "shared/logutil";
 
 /**
  * A list of messages and their callback types.
@@ -39,9 +42,23 @@ export class TycoonCommunication implements OnStart, OnInit {
         (msgName: string, tycoon: Tycoon<TycoonAttributes>, ...args: Array<any>) => unknown
     > = new Signal();
 
+    constructor(private serverLog: ServerLog) {}
+
+    private _log?: Logger;
+    protected getLog(): Logger {
+        const log = this._log;
+        assert(log, "Log not created yet.");
+        return log;
+    }
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.getLog(), condition, template, ...args);
+    }
+
     onInit() {
+        this._log = this.serverLog.forController(TycoonCommunication);
         this.tycoonMessageEvent.Connect((msgName, tycoon, args) => {
-            print(`[TycoonCommunication] ${msgName} recieved for ${tycoon.getOwner() ?? "UNKNOWN"}'s tycoon'`);
+            this.getLog().Debug(`{msgName} recieved for {tycoon_owner}'s tycoon'`, msgName, tycoon.getOwner());
         });
     }
 
@@ -58,8 +75,8 @@ export class TycoonCommunication implements OnStart, OnInit {
         tycoon: Tycoon<A>,
         ...args: FunctionParameters<CommunicationMessages[N]>
     ) {
-        assert(messageTypeChecks[message], `${message} is not a valid message type`);
-        assert(messageTypeChecks[message](args), `fire arguments does not match arguments for ${message}`);
+        this.assert(messageTypeChecks[message], `{message} is not a valid message type`, message);
+        this.assert(messageTypeChecks[message](args), `fire arguments does not match arguments for {message}`, message);
         this.tycoonMessageEvent.Fire(message, tycoon, ...args);
     }
 

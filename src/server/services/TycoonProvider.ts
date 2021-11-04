@@ -4,6 +4,9 @@ import { CollectionService, Players, ServerStorage, Workspace } from "@rbxts/ser
 import { TycoonLocation } from "server/components/TycoonLocation";
 import { TycoonServer } from "server/components/TycoonServer";
 import tutil from "shared/tutil";
+import { ServerLog } from "./ServerLog";
+import { Logger } from "@rbxts/log";
+import { assertLog } from "shared/logutil";
 
 const components = Dependency<Components>();
 
@@ -13,9 +16,23 @@ const { Model: isModel } = tutil.InstanceIsA;
 export class TycoonProvider implements OnStart, OnInit {
     private tycoonTemplate?: Model;
 
+    constructor(private serverLog: ServerLog) {}
+
+    private _log?: Logger;
+    protected getLog(): Logger {
+        const log = this._log;
+        assert(log, "Log not created yet.");
+        return log;
+    }
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.getLog(), condition, template, ...args);
+    }
+
     onInit() {
+        this._log = this.serverLog.forController(TycoonProvider);
         const model = ServerStorage.WaitForChild("TycoonBase");
-        assert(isModel(model));
+        this.assert(isModel(model), "TycoonBase is not a Model, got {recieved} instead.", model);
         this.tycoonTemplate = model;
     }
 
@@ -46,9 +63,9 @@ export class TycoonProvider implements OnStart, OnInit {
 
     createTycoonFor(player: Player): TycoonServer {
         const location = this.choosePlot();
-        assert(location, "Couldn't pick random location that was available.");
+        this.assert(location, "Couldn't pick random location that was available.");
 
-        assert(this.tycoonTemplate, "TycoonProvider.tycoonTemplate is undefined.");
+        this.assert(this.tycoonTemplate, "TycoonProvider.tycoonTemplate is undefined.");
         const tycoonInstance = this.tycoonTemplate!.Clone();
         tycoonInstance.Name = `${player.Name}_Tycoon`;
         tycoonInstance.SetAttribute("OwningUserId", player.UserId);

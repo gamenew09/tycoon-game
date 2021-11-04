@@ -20,7 +20,7 @@ export class TycoonServer extends Tycoon<TycoonAttributes> implements OnStart, I
     }
 
     onCollectResource(resourceType: keyof DropTypes, resource: DropTypeRegister): void {
-        print(`Collected ${resourceType} which has a worth of ${resource.Worth}`);
+        this.log.Info(`Collected ${resourceType} which has a worth of ${resource.Worth}`);
         this.setAttribute("BankAmount", this.attributes.BankAmount + resource.Worth);
     }
 }

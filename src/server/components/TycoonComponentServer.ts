@@ -4,6 +4,9 @@ import { TycoonServer } from "./TycoonServer";
 import { RunService, ServerStorage } from "@rbxts/services";
 import { ITycoonComponent, TycoonComponentAttributes } from "shared/components/TycoonComponent";
 import { TycoonCommunication } from "server/services/TycoonCommunication";
+import { ServerLog } from "server/services/ServerLog";
+import { Logger } from "@rbxts/log";
+import { assertLog } from "shared/logutil";
 const components = Dependency<Components>();
 
 interface Attributes {}
@@ -18,6 +21,15 @@ export class TycoonComponentServer<A extends object, I extends Instance>
 {
     constructor(protected tycoonCommunication: TycoonCommunication) {
         super();
+        const serverLog = Dependency<ServerLog>();
+        this.log = serverLog.forComponent(this);
+        assert(this.log, "log failed to be made");
+    }
+
+    protected log!: Logger;
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.log, condition, template, ...args);
     }
 
     private owner?: TycoonServer;
@@ -37,7 +49,6 @@ export class TycoonComponentServer<A extends object, I extends Instance>
                 let parent = this.instance.Parent;
                 while (parent !== undefined) {
                     const tycoon = components.getComponent<TycoonServer>(parent);
-                    //print(`${parent} = ${tycoon ?? "undefined"}`);
                     if (tycoon !== undefined) {
                         resolve(tycoon);
                         return;

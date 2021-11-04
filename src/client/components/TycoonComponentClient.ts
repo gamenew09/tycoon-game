@@ -3,6 +3,9 @@ import { Component, BaseComponent, Components } from "@flamework/components";
 import { TycoonClient } from "./TycoonClient";
 import { RunService, ServerStorage } from "@rbxts/services";
 import { ITycoonComponent, TycoonComponentAttributes } from "shared/components/TycoonComponent";
+import { ClientLog } from "client/controllers/ClientLog";
+import { assertLog } from "shared/logutil";
+import { Logger } from "@rbxts/log";
 
 const components = Dependency<Components>();
 
@@ -14,6 +17,20 @@ export class TycoonComponentClient<A extends object, I extends Instance>
     extends BaseComponent<A & TycoonComponentAttributes, I>
     implements OnStart, ITycoonComponent<TycoonClient>
 {
+    constructor() {
+        super();
+
+        const clientLog = Dependency<ClientLog>();
+        this.log = clientLog.forComponent(this);
+        assert(this.log, "log failed to be made");
+    }
+
+    protected log!: Logger;
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.log, condition, template, ...args);
+    }
+
     unlockComponent(): void {
         throw "Method not implemented.";
     }
@@ -44,10 +61,8 @@ export class TycoonComponentClient<A extends object, I extends Instance>
 
             while (!canceling) {
                 let parent = this.instance.Parent;
-                print("----");
                 while (parent !== undefined) {
                     const tycoon = components.getComponent<TycoonClient>(parent);
-                    print(`${parent} = ${tycoon ?? "undefined"}`);
                     if (tycoon !== undefined) {
                         resolve(tycoon);
                         return;

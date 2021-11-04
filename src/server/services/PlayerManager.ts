@@ -1,5 +1,8 @@
 import { Service, OnStart, OnInit } from "@flamework/core";
 import { HttpService, Players } from "@rbxts/services";
+import { ServerLog } from "./ServerLog";
+import { Logger } from "@rbxts/log";
+import { assertLog } from "shared/logutil";
 
 interface CallbackEntry {
     Id: string;
@@ -28,7 +31,21 @@ function promisfyCallbackEntryGeneric(ply: Player, entry: CallbackEntry): Promis
     loadOrder: 0,
 })
 export class PlayerManager implements OnStart, OnInit {
+    constructor(private serverLog: ServerLog) {}
+
+    private _log?: Logger;
+    protected getLog(): Logger {
+        const log = this._log;
+        assert(log, "Log not created yet.");
+        return log;
+    }
+
+    protected assert<T>(condition: T, template: string, ...args: unknown[]): asserts condition {
+        assertLog(this.getLog(), condition, template, ...args);
+    }
+
     onInit() {
+        this._log = this.serverLog.forController(PlayerManager);
         Players.PlayerAdded.Connect((ply) => this.onPlayerAdded(ply));
         Players.PlayerRemoving.Connect((ply) => this.onPlayerRemoving(ply));
     }

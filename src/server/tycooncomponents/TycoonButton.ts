@@ -14,7 +14,7 @@ interface Attributes {
 })
 export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> implements OnStart {
     onTycoonStart() {
-        print(`Hey we're inside a tycoon! ${this.getOwningTycoon().instance}`);
+        this.log.Verbose(`Hey we're inside a tycoon! {owner}`, this.getOwningTycoon().getOwner());
 
         // Either use an existing ProximityPrompt in the button or create a new one.
         let interact = this.instance.FindFirstAncestorWhichIsA("ProximityPrompt");

@@ -10,6 +10,6 @@ interface Attributes extends TycoonDropperAttributes {}
 })
 export class TycoonDropperClient extends TycoonComponentClient<Attributes, TycoonDropperInstance> implements OnStart {
     onTycoonStart() {
-        print("dropperclient");
+        this.log.Verbose("dropperclient");
     }
 }
