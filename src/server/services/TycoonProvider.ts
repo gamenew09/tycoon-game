@@ -50,6 +50,7 @@ export class TycoonProvider implements OnStart, OnInit {
 
         assert(this.tycoonTemplate, "TycoonProvider.tycoonTemplate is undefined.");
         const tycoonInstance = this.tycoonTemplate!.Clone();
+        tycoonInstance.Name = `${player.Name}_Tycoon`;
         tycoonInstance.SetAttribute("OwningUserId", player.UserId);
         tycoonInstance.SetPrimaryPartCFrame(location.getCFrame());
         tycoonInstance.Parent = Workspace;
