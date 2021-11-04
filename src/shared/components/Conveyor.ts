@@ -10,8 +10,6 @@ interface Attributes {
 
 /**
  * Turns a BasePart into a conveyor belt.
- *
- * NOTE: This will make the part anchored, since LinearVelocity conveyors only work with Anchored parts.
  */
 @Component({
     tag: "Conveyor",
