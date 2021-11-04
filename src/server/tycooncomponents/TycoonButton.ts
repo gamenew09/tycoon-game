@@ -2,6 +2,7 @@ import { Dependency, OnStart } from "@flamework/core";
 import { Component } from "@flamework/components";
 import { TycoonComponentServer } from "server/components/TycoonComponentServer";
 import { MoneyProvider } from "server/services/MoneyProvider";
+import { SoundPlayer } from "server/services/SoundPlayer";
 
 interface Attributes {
     UnlockId: string;
@@ -16,6 +17,7 @@ interface Attributes {
 export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> implements OnStart {
     onTycoonStart() {
         const moneyProvider = Dependency<MoneyProvider>();
+        const soundPlayer = Dependency<SoundPlayer>();
 
         this.log.Verbose(`Hey we're inside a tycoon! {owner}`, this.getOwningTycoon().getOwner());
 
@@ -50,6 +52,8 @@ export class TycoonButtonServer extends TycoonComponentServer<Attributes, Part> 
                     // Send unlock message to tycoon.
 
                     this.tycoonCommunication.fire("unlock", tycoon, this.attributes.UnlockId);
+
+                    soundPlayer.playUiSound(ply, "bought_item", 0.5);
 
                     // Destroy the component itself & the attached instance.
                     this.destroy();
