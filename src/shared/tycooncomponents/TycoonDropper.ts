@@ -33,7 +33,14 @@ export const DropTypes = {
             Color: Color3.fromRGB(204, 166, 5),
             Material: Enum.Material.CorrodedMetal,
         },
-        Worth: new NumberRange(2, 5),
+        Worth: new NumberRange(5, 10),
+    }),
+    iron: identity<DropTypeRegister>({
+        PartProperties: {
+            Color: Color3.fromRGB(250, 235, 173),
+            Material: Enum.Material.Metal,
+        },
+        Worth: new NumberRange(2, 4),
     }),
 };
 export type DropTypes = typeof DropTypes;
