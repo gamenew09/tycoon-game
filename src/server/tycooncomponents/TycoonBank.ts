@@ -28,7 +28,7 @@ export class TycoonBankServer extends TycoonComponentServer<Attributes, TycoonBa
         const interact = new Instance("ProximityPrompt");
         interact.ActionText = "Collect";
         //interact.HoldDuration = 0.5;
-        interact.Parent = this.instance.BankGrabPad;
+        interact.Parent = this.instance.MoneyDisplay;
         interact.Name = "TycoonBankPrompt";
 
         this.maid.GiveTask(interact.Triggered.Connect((ply) => this.handleBankGrabInteract(ply)));
