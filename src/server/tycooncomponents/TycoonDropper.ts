@@ -9,7 +9,7 @@ import {
 } from "shared/tycooncomponents/TycoonDropper";
 import Object from "@rbxts/object-utils";
 import { foreachInObject } from "shared/objectutil";
-import { PhysicsService } from "@rbxts/services";
+import { Debris, PhysicsService } from "@rbxts/services";
 import { SetPartCollisionGroup } from "shared/collisiongroups";
 
 interface Attributes extends TycoonDropperAttributes {}
@@ -47,6 +47,9 @@ export class TycoonDropperServer
         SetPartCollisionGroup(part, "Resource");
         part.Parent = this.getOwningTycoon().instance;
         part.SetNetworkOwner(undefined); // Change ownership to server.
+
+        // After 30 seconds, remove the resource. We probably fell of the conveyor belt.
+        Debris.AddItem(part, 30);
     }
 
     onTick(dt: number): void {
