@@ -1,4 +1,5 @@
 import { Flamework } from "@flamework/core";
+import "shared/collisiongroups";
 
 Flamework.addPaths("src/client/components");
 Flamework.addPaths("src/client/controllers");
