@@ -4,6 +4,7 @@ import { HttpService, Players } from "@rbxts/services";
 import { ITycoon, Tycoon, TycoonAttributes } from "shared/components/Tycoon";
 import { TycoonCommunication } from "server/services/TycoonCommunication";
 import { DropTypeRegister, DropTypes } from "shared/tycooncomponents/TycoonDropper";
+import { t } from "@rbxts/t";
 
 @Component({})
 export class TycoonServer extends Tycoon<TycoonAttributes> implements OnStart, ITycoon {
@@ -20,7 +21,16 @@ export class TycoonServer extends Tycoon<TycoonAttributes> implements OnStart, I
     }
 
     onCollectResource(resourceType: keyof DropTypes, resource: DropTypeRegister): void {
-        this.log.Info(`Collected ${resourceType} which has a worth of ${resource.Worth}`);
-        this.setAttribute("BankAmount", this.attributes.BankAmount + resource.Worth);
+        const worth = resource.Worth;
+
+        const worthValue = math.max(t.NumberRange(worth) ? math.random(worth.Min, worth.Max) : worth, 0);
+
+        this.log.Info(
+            `Collected {resourceType} which has a worth of {@worth} (using value {worth_at_collect})`,
+            resourceType,
+            worth,
+            worthValue,
+        );
+        this.setAttribute("BankAmount", this.attributes.BankAmount + worthValue);
     }
 }

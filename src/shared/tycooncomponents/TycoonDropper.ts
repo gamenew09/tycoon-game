@@ -9,7 +9,7 @@ export interface DropTypeRegister {
     /**
      * The amount of money that would be added to the bank when collected.
      */
-    Worth: number;
+    Worth: number | NumberRange;
 }
 export const isDropTypeRegister = t.strictInterface({
     PartProperties: t.interface({
@@ -19,7 +19,7 @@ export const isDropTypeRegister = t.strictInterface({
         Size: t.union(t.Vector3, t.nil),
         Transparency: t.union(t.number, t.nil),
     }),
-    Worth: t.number,
+    Worth: t.union(t.number, t.NumberRange),
 });
 
 /**
@@ -31,7 +31,7 @@ export const DropTypes = {
             Color: Color3.fromRGB(204, 166, 5),
             Material: Enum.Material.CorrodedMetal,
         },
-        Worth: 1,
+        Worth: new NumberRange(2, 5),
     }),
 };
 export type DropTypes = typeof DropTypes;
