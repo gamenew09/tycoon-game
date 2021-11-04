@@ -70,4 +70,29 @@ export class MoneyProvider implements OnStart, OnInit {
     private async onPlayerRemoving(ply: Player) {
         await this.saveMoney(ply);
     }
+
+    /**
+     * Gives a player `delta` amount of money. `delta` can be negative.
+     * @param ply The player to give money to.
+     * @param delta The amount to add (or remove)
+     * @returns A promise to add the money and return the new money amount the player has.
+     */
+    public async giveMoney(ply: Player, delta: number): Promise<number> {
+        const statObject = this.leaderstatsProvider.getStatObject(ply, "Money", "IntValue");
+        this.assert(statObject, "statObject by the name of Money was invalid.");
+        const newValue = statObject.Value + delta;
+        statObject.Value = newValue;
+        return newValue;
+    }
+
+    /**
+     * Gets the money that a player has.
+     * @param ply The player to get money for.
+     * @returns A promise to return the amount of money a player has.
+     */
+    public async getMoney(ply: Player): Promise<number> {
+        const statObject = this.leaderstatsProvider.getStatObject(ply, "Money", "IntValue");
+        this.assert(statObject, "statObject by the name of Money was invalid.");
+        return statObject.Value;
+    }
 }
