@@ -8,6 +8,7 @@ import { ClientLog } from "./ClientLog";
 import { Logger } from "@rbxts/log";
 import ContentProviderAsync from "client/ContentProviderAsync";
 import { foreachInObject, mapObjectKV } from "shared/objectutil";
+import { t } from "@rbxts/t";
 
 @Controller({})
 export class SoundPlayer implements OnStart, OnInit {
@@ -36,18 +37,35 @@ export class SoundPlayer implements OnStart, OnInit {
 
         // Convert sound ids to Instances and preload them.
         const sounds = mapObjectKV(SoundDatas, (soundId) => {
-            const inst = new Instance("Sound");
-            inst.SoundId = soundId;
-            return inst;
+            if (t.array(t.string)(soundId)) {
+                return soundId.map((sndId) => {
+                    const inst = new Instance("Sound");
+                    inst.SoundId = sndId;
+                    return inst;
+                });
+            } else {
+                const inst = new Instance("Sound");
+                inst.SoundId = soundId;
+                return [inst];
+            }
         });
-        await ContentProviderAsync.Preload(sounds);
-        sounds.forEach((snd) => snd.Destroy());
+        const oneDArrayOfSounds = sounds.reduce((accum, val) => {
+            val.forEach((v) => accum.push(v));
+            return accum;
+        }, [] as Sound[]);
+        await ContentProviderAsync.Preload(oneDArrayOfSounds);
+        oneDArrayOfSounds.forEach((snd) => snd.Destroy());
     }
 
-    protected resolveSoundId(soundName: keyof SoundDatas): SoundData {
+    protected pickSoundId(soundName: keyof SoundDatas): string {
         const data = SoundDatas[soundName];
         this.assert(data, "Invalid sound name, was given {sound}", soundName);
-        return data;
+        if (t.array(t.string)(data)) {
+            // Pick random sound from list.
+            return data[math.random(0, data.size() - 1)];
+        } else {
+            return data;
+        }
     }
 
     public playUiSound(soundName: keyof SoundDatas, volume: number) {
@@ -56,7 +74,7 @@ export class SoundPlayer implements OnStart, OnInit {
         const sound = new Instance("Sound");
         uiSoundMaid.GiveTask(sound);
         uiSoundMaid.GiveTask(sound.Ended.Connect(() => uiSoundMaid.Destroy()));
-        sound.SoundId = this.resolveSoundId(soundName);
+        sound.SoundId = this.pickSoundId(soundName);
         sound.Volume = volume;
         sound.Parent = this.uiSoundLocation;
         sound.Play();
