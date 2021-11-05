@@ -6,7 +6,7 @@ import logconfig from "server/logconfig";
 type Constructor<T = unknown> = new (...args: never[]) => T;
 
 @Service({
-    loadOrder: -1,
+    loadOrder: -9999,
 })
 export class ServerLog implements OnStart, OnInit {
     onStart(): void {}

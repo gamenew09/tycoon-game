@@ -6,7 +6,7 @@ import logconfig from "client/logconfig";
 type Constructor<T = unknown> = new (...args: never[]) => T;
 
 @Controller({
-    loadOrder: -1,
+    loadOrder: -9999,
 })
 export class ClientLog implements OnStart, OnInit {
     onStart(): void {}
