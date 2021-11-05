@@ -406,6 +406,7 @@ local module = {}
 module.InstanceIsA = {}
 module.InstanceOf = {}
 
+-- Iterates through all of the InstanceNames above and creates a type check function for them.
 for _, instanceClassName in pairs(InstanceNames) do
     module.InstanceIsA[instanceClassName] = t.instanceIsA(instanceClassName)
     module.InstanceOf[instanceClassName] = t.instanceOf(instanceClassName)

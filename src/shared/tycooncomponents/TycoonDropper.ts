@@ -1,6 +1,9 @@
 import Object from "@rbxts/object-utils";
 import { t } from "@rbxts/t";
 
+/**
+ * Represents a drop type (aka Resource).
+ */
 export interface DropTypeRegister {
     /**
      * The properties that are applied to a part representing this type.
@@ -13,6 +16,9 @@ export interface DropTypeRegister {
      */
     Worth: number | NumberRange;
 }
+/**
+ * Verifies that the value given is a DropTypeRegister
+ */
 export const isDropTypeRegister = t.strictInterface({
     PartProperties: t.interface({
         Color: t.union(t.Color3, t.nil),
@@ -45,14 +51,23 @@ export const DropTypes = {
 };
 export type DropTypes = typeof DropTypes;
 
+/**
+ * Verifies that the value checked is a DropType.
+ */
 export const isDropTypeKeys: t.check<keyof DropTypes> = t.literal(...Object.keys(DropTypes));
 
+/**
+ * Represents the intended structure of the TycoonDropper Model.
+ */
 export interface TycoonDropperInstance extends Model {
     DropPart: Part & {
         DropLocation: Attachment;
     };
 }
 
+/**
+ * The attributes that a TycoonDropper should have.
+ */
 export interface TycoonDropperAttributes {
     Type: keyof DropTypes;
     TimeBetweenDrop?: number;

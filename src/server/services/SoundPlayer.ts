@@ -5,6 +5,9 @@ import { SoundDatas } from "shared/sounds";
 import { ServerLog } from "./ServerLog";
 import { Logger } from "@rbxts/log";
 
+/**
+ * Handles playing sounds for other players via Flamework networking.
+ */
 @Service({})
 export class SoundPlayer implements OnStart, OnInit {
     constructor(private serverLog: ServerLog) {}

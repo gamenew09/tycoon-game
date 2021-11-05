@@ -2,16 +2,27 @@ import Maid from "@rbxts/maid";
 import Roact from "@rbxts/roact";
 import { RunService } from "@rbxts/services";
 
+/**
+ * The state that a LoadingUI component has.
+ */
 interface LoadingUIState {
     dots: number;
     nextDot: number;
 }
 
+/**
+ * The properties that can be given when creating the LoadingUI component.
+ */
 interface LoadingUIProps {
     TimeBetweenDots: number;
     MaxDots: number;
 }
 
+/**
+ * A Roact Component that shows up during Flamework's loading phase.
+ *
+ * All it does is show Text with dots animating. [. then .. then .. then ... etc.]
+ */
 export default class LoadingUI extends Roact.Component<LoadingUIProps, LoadingUIState> {
     private maid: Maid = new Maid();
 

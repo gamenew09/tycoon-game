@@ -1,6 +1,11 @@
 import Roact from "@rbxts/roact";
 import GameStateContext from "../contexts/GameStateContext";
 
+/**
+ * The component that houses all the loaded game UI.
+ *
+ * Consumes a GameStateContext so that we can show the Player's Money.
+ */
 export default class MainUI extends Roact.Component {
     public render(): Roact.Element | undefined {
         return (

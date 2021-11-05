@@ -12,6 +12,10 @@ export interface TycoonAttributes {
 }
 
 export interface ITycoon {
+    /**
+     * Gets the owner of the tycoon, if there is one.
+     * @returns The owner, if any
+     */
     getOwner(): Player | undefined;
 }
 
@@ -19,10 +23,17 @@ interface ILogProvider {
     forComponent(x: BaseComponent): Logger;
 }
 
+/**
+ * Represent's a Player's tycoon.
+ *
+ * Has some basic functionality that can be shared between sides (server/client).
+ */
 @Component({})
 export class Tycoon<A extends TycoonAttributes> extends BaseComponent<A> implements OnStart, ITycoon {
     constructor() {
         super();
+
+        // Load the correct Log creator Singleton based on what side we are running the code on.
         let logProvider: ILogProvider;
         if (RunService.IsServer()) {
             logProvider = Dependency<ServerLog>();

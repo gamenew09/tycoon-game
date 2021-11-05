@@ -11,6 +11,9 @@ interface Attributes {
     ObjectText?: string;
 }
 
+/**
+ * Represents a button that can unlock other Tycoon Components.
+ */
 @Component({
     tag: "TycoonButton",
 })

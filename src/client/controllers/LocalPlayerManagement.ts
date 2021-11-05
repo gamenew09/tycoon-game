@@ -6,6 +6,11 @@ import tutil from "shared/tutil";
 
 type MoneyChangedCallback = (newMoney: number, oldMoney: number) => void;
 
+/**
+ * This controllers handles data relating to the Local Player: Money, etc.
+ *
+ * Allows the UI to access and keep a copy of the data as well (via Signals).
+ */
 @Controller({
     loadOrder: 0,
 })

@@ -5,6 +5,9 @@ import { DropTypeRegister, DropTypes } from "shared/tycooncomponents/TycoonDropp
 
 interface Attributes {}
 
+/**
+ * Handles collecting dropped resources from droppers and adds their calculated worth to the Tycoon's bank.
+ */
 @Component({
     tag: "ResourceCollector",
 })

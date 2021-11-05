@@ -6,6 +6,11 @@ import { TycoonCommunication } from "server/services/TycoonCommunication";
 import { DropTypeRegister, DropTypes } from "shared/tycooncomponents/TycoonDropper";
 import { t } from "@rbxts/t";
 
+/**
+ * A Tycoon Component that has server specific code.
+ *
+ * Extends Tycoon so that code can be shared between Server & Client.
+ */
 @Component({})
 export class TycoonServer extends Tycoon<TycoonAttributes> implements OnStart, ITycoon {
     constructor(protected tycoonCommunication: TycoonCommunication) {
@@ -20,6 +25,11 @@ export class TycoonServer extends Tycoon<TycoonAttributes> implements OnStart, I
         );
     }
 
+    /**
+     * Handles collecting resources from a Tycoon's Resource Collector.
+     * @param resourceType The resource type that was collected in a Resource Collector.
+     * @param resource The data that about the resource type that was in the registry.
+     */
     onCollectResource(resourceType: keyof DropTypes, resource: DropTypeRegister): void {
         const worth = resource.Worth;
 

@@ -6,6 +6,11 @@ import { ServerLog } from "./ServerLog";
 import { Logger } from "@rbxts/log";
 import { assertLog } from "shared/logutil";
 
+/**
+ * Handles money for all players.
+ *
+ * The leaderstats value object gets created in the LeaderstatsProvider, however.
+ */
 @Service({
     loadOrder: 2,
 })

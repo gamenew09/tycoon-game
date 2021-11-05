@@ -14,6 +14,9 @@ import { SetPartCollisionGroup } from "shared/collisiongroups";
 
 interface Attributes extends TycoonDropperAttributes {}
 
+/**
+ * Handles dropping resources for the TycoonCollector to collect.
+ */
 @Component({
     tag: "TycoonDropper",
 })

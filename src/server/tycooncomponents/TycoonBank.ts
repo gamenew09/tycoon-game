@@ -9,6 +9,9 @@ import { SoundPlayer } from "server/services/SoundPlayer";
 
 interface Attributes {}
 
+/**
+ * Represents the bank that holds money collected from resources. Can be interacted with to put into the Player's Money count.
+ */
 @Component({
     tag: "Bank",
 })

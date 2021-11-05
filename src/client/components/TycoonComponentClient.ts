@@ -10,7 +10,9 @@ import { Logger } from "@rbxts/log";
 const components = Dependency<Components>();
 
 /**
- * A base component that all components that are inside of a Tycoon instance are based on.
+ * Tycoon will have these types of components inside of them. These components represent Droppers, Banks, Collectors, etc.
+ *
+ * This allows for unlocking/locking components without having to always reinvent the wheel.
  */
 @Component({})
 export class TycoonComponentClient<A extends object, I extends Instance>

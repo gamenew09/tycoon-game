@@ -31,7 +31,7 @@ const messageTypeChecks: {
 };
 
 /**
- * Handles communication between tycoons.
+ * Handles communication inside & between tycoons.
  */
 @Service({
     loadOrder: 0,

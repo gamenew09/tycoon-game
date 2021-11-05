@@ -10,6 +10,9 @@ interface Attributes {
 
 const { ProximityPrompt: isProximityPrompt } = tutil.InstanceIsA;
 
+/**
+ * Represents a button that can unlock other Tycoon Components.
+ */
 @Component({
     tag: "TycoonButton",
 })

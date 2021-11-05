@@ -7,6 +7,9 @@ export type CustomCollisionGroups = "Player" | "Resource";
 export type CollisionGroups = RobloxCollisionGroups | CustomCollisionGroups;
 export const AllCollisionGroups = ["Default", "Player", "Resource"];
 
+/**
+ * Defines relationships between all of the CollisionGroups (even themselves).
+ */
 const CollisionGroupRelationships: {
     [n in CustomCollisionGroups]: { [C in CollisionGroups]: boolean };
 } = {
@@ -23,10 +26,12 @@ const CollisionGroupRelationships: {
 };
 
 if (RunService.IsServer()) {
+    // Create the custom Collision Groups.
     AllCollisionGroups.filter((group) => group !== "Default").forEach((group) =>
         PhysicsService.CreateCollisionGroup(group),
     );
 
+    // Apply the defined relationships for the Collision Groups.
     foreachInObject(CollisionGroupRelationships, (relationships, groupA) => {
         foreachInObject(relationships, (collidable, groupB) => {
             PhysicsService.CollisionGroupSetCollidable(groupA, groupB, collidable);
@@ -34,6 +39,11 @@ if (RunService.IsServer()) {
     });
 }
 
+/**
+ * A typed shorthand for `PhysicsService.SetPartCollisionGroup`. Prevents you from trying to add a BasePart to a Collision Group that doesn't exist.
+ * @param part The BasePart to set the collision group for.
+ * @param group The specific Collision Group to set.
+ */
 export function SetPartCollisionGroup(part: BasePart, group: CollisionGroups) {
     PhysicsService.SetPartCollisionGroup(part, group);
 }

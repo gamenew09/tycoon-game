@@ -4,6 +4,9 @@ import Roact from "@rbxts/roact";
 import { LocalPlayerManagement } from "client/controllers/LocalPlayerManagement";
 import GameStateContext, { UiGameState } from "client/ui/contexts/GameStateContext";
 
+/**
+ * Handles populating data that can be consumed by `GameStateContext.Consumer` Roact components.
+ */
 export default class GameStateProvider extends Roact.Component<{}, UiGameState> {
     private maid: Maid = new Maid();
 
@@ -12,6 +15,7 @@ export default class GameStateProvider extends Roact.Component<{}, UiGameState> 
     constructor(p: {}) {
         super(p);
 
+        // Load the LocalPlayerManagement Controller via Dependency injection.
         this.localPlayerManagement = Dependency<LocalPlayerManagement>();
         this.state = {
             money: {
@@ -22,6 +26,7 @@ export default class GameStateProvider extends Roact.Component<{}, UiGameState> 
     }
 
     didMount(): void {
+        // Connect to the LocalPlayerManagement's MoneyChanged event, and update the state everytime it updates.
         this.maid.GiveTask(
             this.localPlayerManagement.MoneyChanged.Connect((newMoney, oldMoney) => {
                 this.setState({
@@ -33,10 +38,15 @@ export default class GameStateProvider extends Roact.Component<{}, UiGameState> 
             }),
         );
 
+        // Initialize this component's state with valid initial values from the game & local player.
         this.initValues();
     }
 
+    /**
+     * Populates the state with valid initial values (values from the local player).
+     */
     initValues(): void {
+        // Retrieve the money and tell the state that the current and last money are the same.
         const money = this.localPlayerManagement.getMoney();
         this.setState({
             money: {
@@ -47,11 +57,14 @@ export default class GameStateProvider extends Roact.Component<{}, UiGameState> 
     }
 
     willUnmount(): void {
-        // really this shouldn't need to be unmounted, but just in case it does. Maid everything we need to.
+        // Clean everything given to the maid.
         this.maid.Destroy();
     }
 
     public render(): Roact.Element | undefined {
+        // All we do is wrap the children given to us in a Provider.
+        // Later down the road, we can consume the GameStateContext via a GameStateContext.Consumer.
+        //      See a practical example currently in MainUI.tsx, inside the render function.
         return <GameStateContext.Provider value={this.state}>{this.props[Roact.Children]}</GameStateContext.Provider>;
     }
 }

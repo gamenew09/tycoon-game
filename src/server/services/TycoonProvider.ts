@@ -12,6 +12,9 @@ const components = Dependency<Components>();
 
 const { Model: isModel } = tutil.InstanceIsA;
 
+/**
+ * Handles spawning in Tycoons for new players.
+ */
 @Service({})
 export class TycoonProvider implements OnStart, OnInit {
     private tycoonTemplate?: Model;

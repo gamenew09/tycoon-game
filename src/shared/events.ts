@@ -1,8 +1,14 @@
 import { Networking } from "@flamework/networking";
 import { SoundDatas } from "./sounds";
 
+/**
+ * This interface defines all events that can be called Client -> Server.
+ */
 interface ServerEvents {}
 
+/**
+ * This interface defines all events that can be called Server -> Client.
+ */
 interface ClientEvents {
     playSound: (soundId: keyof SoundDatas, volume: number) => void;
 }

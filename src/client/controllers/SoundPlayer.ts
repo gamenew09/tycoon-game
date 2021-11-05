@@ -10,6 +10,9 @@ import ContentProviderAsync from "client/ContentProviderAsync";
 import { foreachInObject, mapObjectKV } from "shared/objectutil";
 import { t } from "@rbxts/t";
 
+/**
+ * Handles playing sounds for the local player.
+ */
 @Controller({})
 export class SoundPlayer implements OnStart, OnInit {
     private uiSoundLocation?: Instance;

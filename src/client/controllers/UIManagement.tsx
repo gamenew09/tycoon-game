@@ -9,6 +9,10 @@ import { Logger } from "@rbxts/log";
 import LoadingUI from "client/ui/components/LoadingUI";
 import tutil from "shared/tutil";
 
+/**
+ * Handles mounting & unmounting the main Roact components:
+ *      LoadingUI & MainUI
+ */
 @Controller({
     loadOrder: -99,
 })

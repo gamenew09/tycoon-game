@@ -10,7 +10,9 @@ interface Attributes {
 }
 
 /**
- * Turns a BasePart into a conveyor belt.
+ * Allows a BasePart to act as a Conveyor Belt to Resources.
+ *
+ * NOTE: This pushes Parts via ApplyImpulse, not the usual Anchored + LinearVelocity combo you see with most conveyor belts.
  */
 @Component({
     tag: "Conveyor",

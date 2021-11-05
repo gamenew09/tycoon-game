@@ -5,6 +5,9 @@ import logconfig from "client/logconfig";
 
 type Constructor<T = unknown> = new (...args: never[]) => T;
 
+/**
+ * A controller that handles creating Logger instances for other Controllers and Components.
+ */
 @Controller({
     loadOrder: -9999,
 })
