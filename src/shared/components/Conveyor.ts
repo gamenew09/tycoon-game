@@ -5,6 +5,7 @@ import { Tycoon, TycoonAttributes } from "./Tycoon";
 
 interface Attributes {
     Speed: number;
+    MaxSpeed?: number;
     ShowTrigger?: boolean;
 }
 
@@ -114,7 +115,9 @@ export class Conveyor extends BaseComponent<Attributes, BasePart> implements OnS
 
         const parts = this.getPartsInTrigger().filter((part) => part.GetAttribute("ResourceType") !== undefined);
         parts.forEach((part) => {
-            part.ApplyImpulse(this.instance.CFrame.LookVector.mul(this.attributes.Speed));
+            if (part.AssemblyLinearVelocity.Magnitude < (this.attributes.MaxSpeed ?? this.attributes.Speed)) {
+                part.ApplyImpulse(this.instance.CFrame.LookVector.mul(this.attributes.Speed));
+            }
         });
     }
 }
