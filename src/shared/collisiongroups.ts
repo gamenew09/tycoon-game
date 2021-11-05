@@ -8,15 +8,17 @@ export type CollisionGroups = RobloxCollisionGroups | CustomCollisionGroups;
 export const AllCollisionGroups = ["Default", "Player", "Resource"];
 
 const CollisionGroupRelationships: {
-    [n in CustomCollisionGroups]: { [C in Exclude<CollisionGroups, n>]: boolean };
+    [n in CustomCollisionGroups]: { [C in CollisionGroups]: boolean };
 } = {
     Player: {
         Default: true,
         Resource: false,
+        Player: true,
     },
     Resource: {
         Default: true,
         Player: false,
+        Resource: false,
     },
 };
 
