@@ -30,7 +30,7 @@ export class TycoonProvider implements OnStart, OnInit {
     }
 
     onInit() {
-        this._log = this.serverLog.forController(TycoonProvider);
+        this._log = this.serverLog.forService(TycoonProvider);
         const model = ServerStorage.WaitForChild("TycoonBase");
         this.assert(isModel(model), "TycoonBase is not a Model, got {recieved} instead.", model);
         this.tycoonTemplate = model;

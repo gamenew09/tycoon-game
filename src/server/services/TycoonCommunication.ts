@@ -56,7 +56,7 @@ export class TycoonCommunication implements OnStart, OnInit {
     }
 
     onInit() {
-        this._log = this.serverLog.forController(TycoonCommunication);
+        this._log = this.serverLog.forService(TycoonCommunication);
         this.tycoonMessageEvent.Connect((msgName, tycoon, args) => {
             this.getLog().Debug(`{msgName} recieved for {tycoon_owner}'s tycoon'`, msgName, tycoon.getOwner());
         });

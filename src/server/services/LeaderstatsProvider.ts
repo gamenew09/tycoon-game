@@ -37,7 +37,7 @@ export class LeaderstatsProvider implements OnStart, OnInit {
     }
 
     onInit() {
-        this._log = this.serverLog.forController(LeaderstatsProvider);
+        this._log = this.serverLog.forService(LeaderstatsProvider);
         this.registerStat("Money", "IntValue", 0);
     }
 

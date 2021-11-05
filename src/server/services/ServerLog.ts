@@ -16,7 +16,7 @@ export class ServerLog implements OnStart, OnInit {
         // TODO: Would love to create logger objects for each controller.
     }
 
-    forController(x: Constructor): Logger {
+    forService(x: Constructor): Logger {
         return Log.ForContext(x);
     }
 

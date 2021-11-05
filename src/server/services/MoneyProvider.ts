@@ -28,7 +28,7 @@ export class MoneyProvider implements OnStart, OnInit {
     }
 
     onInit() {
-        this._log = this.serverLog.forController(MoneyProvider);
+        this._log = this.serverLog.forService(MoneyProvider);
     }
 
     onStart() {

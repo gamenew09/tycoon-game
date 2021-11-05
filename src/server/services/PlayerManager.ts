@@ -46,7 +46,7 @@ export class PlayerManager implements OnStart, OnInit {
     }
 
     onInit() {
-        this._log = this.serverLog.forController(PlayerManager);
+        this._log = this.serverLog.forService(PlayerManager);
         Players.PlayerAdded.Connect((ply) => this.onPlayerAdded(ply));
         Players.PlayerRemoving.Connect((ply) => this.onPlayerRemoving(ply));
     }
