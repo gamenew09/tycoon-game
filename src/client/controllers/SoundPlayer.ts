@@ -34,7 +34,7 @@ export class SoundPlayer implements OnStart, OnInit {
         this._log = this.clientLog.forController(SoundPlayer);
         this.uiSoundLocation = Players.LocalPlayer!;
 
-        Events.playSound.connect((soundId, volume) => {
+        Events.playUISound.connect((soundId, volume) => {
             this.playUiSound(soundId, volume);
         });
 

@@ -30,6 +30,6 @@ export class SoundPlayer implements OnStart, OnInit {
     onStart() {}
 
     public playUiSound(targets: Player | Player[], soundId: keyof SoundDatas, volume: number) {
-        Events.playSound.fire(targets, soundId, volume);
+        Events.playUISound.fire(targets, soundId, volume);
     }
 }
