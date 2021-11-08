@@ -19,7 +19,7 @@ interface Attributes {}
 @Component({})
 export class TycoonComponentServer<A extends object, I extends Instance>
     extends BaseComponent<A & TycoonComponentAttributes, I>
-    implements OnStart, ITycoonComponent<TycoonServer>
+    implements OnStart, ITycoonComponent<A & TycoonComponentAttributes, TycoonServer>
 {
     constructor(protected tycoonCommunication: TycoonCommunication) {
         super();

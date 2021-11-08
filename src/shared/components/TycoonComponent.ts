@@ -21,7 +21,13 @@ export interface TycoonComponentAttributes {
  *
  * Gives a common api to implement.
  */
-export interface ITycoonComponent<T extends Tycoon<A>, A extends TycoonAttributes = TycoonAttributes> {
+export interface ITycoonComponent<
+    A extends TycoonComponentAttributes,
+    T extends Tycoon<TA>,
+    TA extends TycoonAttributes = TycoonAttributes,
+> {
+    readonly attributes: A;
+
     /**
      * Returns the Tycoon that owns this Component.
      */

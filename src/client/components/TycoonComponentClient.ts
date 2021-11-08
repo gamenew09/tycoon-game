@@ -17,7 +17,7 @@ const components = Dependency<Components>();
 @Component({})
 export class TycoonComponentClient<A extends object, I extends Instance>
     extends BaseComponent<A & TycoonComponentAttributes, I>
-    implements OnStart, ITycoonComponent<TycoonClient>
+    implements OnStart, ITycoonComponent<A & TycoonComponentAttributes, TycoonClient>
 {
     constructor() {
         super();
