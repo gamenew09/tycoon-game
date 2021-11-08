@@ -23,5 +23,7 @@ export class TycoonButtonClient extends TycoonComponentClient<Attributes, Part> 
             // If we find a Proximity Prompt, set it to enabled IF the player that owns the tycoon is the local player.
             prompt.Enabled = this.getOwningTycoon().getOwner() === Players.LocalPlayer;
         }
+
+        // TODO: When the local player gets close to the button, show a holographic representation of the thing they're gonna buy.
     }
 }
